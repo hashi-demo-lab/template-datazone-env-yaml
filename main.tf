@@ -1,18 +1,23 @@
-data "aws_caller_identity" "current" {}
 
-module "datazone_domain" {
-  source  = "app.terraform.io/tfc-demo-au/datazone-domain/awscc"
-  version = "~>  0.2.5"
+data "tfe_outputs" "domain" {
+  organization = var.tfc_organization
+  workspace    = var.datazone_workspace_name
+}
 
-  aws_account                 = data.aws_caller_identity.current.account_id
-  datazone_domain_name        = var.datazone_domain_name
-  datazone_description        = var.datazone_domain_name
-  datazone_kms_key_identifier = var.datazone_kms_key_identifier
-  single_sign_on              = var.single_sign_on
-  tags                        = var.tags
-  region                      = var.region
+locals {
+  datazone_config          = yamldecode(file("${path.module}/config/${var.datazone_domain_yaml_file}"))
+  datazone_domain   = local.datazone_config.datazone
+  datazone_env      = local.datazone_config.datazone_environment
+}
 
-  environment_blueprints = var.environment_blueprints
-  datazone_projects      = var.datazone_projects
+module "datazone_environment" {
+  source  = "app.terraform.io/tfc-demo-au/datazone-environments/awscc"
+  version = "~>  0.1.5"
 
+  region                        = var.region
+  domain_id                     = coalesce(var.domain_id, data.tfe_outputs.domain.values.datazone_domain_id)
+  project_map                   = coalesce(var.project_map, data.tfe_outputs.domain.values.projects)
+  blueprint_map                 = coalesce(var.blueprint_map, data.tfe_outputs.domain.values.datazone_environment_blueprints)
+  datazone_environment_profiles = var.datazone_environment_profiles
+  datazone_environments         = var.datazone_environments
 }

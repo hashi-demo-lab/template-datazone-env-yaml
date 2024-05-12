@@ -1,48 +1,44 @@
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | ~> 0.7 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | 0.54.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.54.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_datazone_domain"></a> [datazone\_domain](#module\_datazone\_domain) | app.terraform.io/tfc-demo-au/datazone-domain/awscc | ~>  0.2.0 |
+| <a name="module_datazone_environment"></a> [datazone\_environment](#module\_datazone\_environment) | app.terraform.io/tfc-demo-au/datazone-environments/awscc | ~>  0.1.5 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [tfe_outputs.domain](https://registry.terraform.io/providers/hashicorp/tfe/0.54.0/docs/data-sources/outputs) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_datazone_description"></a> [datazone\_description](#input\_datazone\_description) | The description of the aws datazone domain | `string` | `"AWS DataZone Domain"` | no |
-| <a name="input_datazone_domain_name"></a> [datazone\_domain\_name](#input\_datazone\_domain\_name) | The name of the aws datazone domain | `string` | n/a | yes |
-| <a name="input_datazone_kms_key_identifier"></a> [datazone\_kms\_key\_identifier](#input\_datazone\_kms\_key\_identifier) | The KMS key identifier to use for encryption | `string` | `null` | no |
-| <a name="input_datazone_projects"></a> [datazone\_projects](#input\_datazone\_projects) | The projects to deploy | <pre>map(object({<br>    description    = optional(string)<br>    glossary_terms = optional(list(string))<br>  }))</pre> | n/a | yes |
-| <a name="input_environment_blueprints"></a> [environment\_blueprints](#input\_environment\_blueprints) | The environment blueprints to deploy | <pre>map(object({<br>    enabled_regions                  = list(string)<br>    environment_blueprint_identifier = string<br>    provisioning_role_arn            = optional(string)<br>    manage_access_role_arn           = optional(string)<br>  }))</pre> | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | The region to deploy the domain | `string` | n/a | yes |
-| <a name="input_single_sign_on"></a> [single\_sign\_on](#input\_single\_sign\_on) | The single sign on configuration | <pre>map(object({<br>    type            = optional(string)<br>    user_assignment = optional(string)<br>  }))</pre> | `{}` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | The tags to apply to the domain | <pre>set(object({<br>    key   = string<br>    value = string<br>  }))</pre> | `null` | no |
+| <a name="input_blueprint_map"></a> [blueprint\_map](#input\_blueprint\_map) | The environment blueprint to deploy | `any` | `null` | no |
+| <a name="input_datazone_environment_profiles"></a> [datazone\_environment\_profiles](#input\_datazone\_environment\_profiles) | The environment profiles to deploy | <pre>map(object({<br>    aws_account_id                   = string<br>    name                             = string<br>    description                      = optional(string)<br>    region                           = string<br>    environment_blueprint_identifier = string<br>    project_identifier               = string<br>    user_parameters = optional(list(object({<br>      name  = string<br>      value = string<br>    })))<br>  }))</pre> | <pre>{<br>  "DefaultDataLake": {<br>    "aws_account_id": "855831148133",<br>    "environment_blueprint_identifier": "DefaultDataLake",<br>    "name": "DefaultDataLake_profile",<br>    "project_identifier": "shared_env",<br>    "region": "ap-southeast-2"<br>  },<br>  "DefaultDataWarehouse": {<br>    "aws_account_id": "855831148133",<br>    "environment_blueprint_identifier": "DefaultDataWarehouse",<br>    "name": "DefaultDataWarehouse_profile",<br>    "project_identifier": "shared_env",<br>    "region": "ap-southeast-2",<br>    "user_parameters": []<br>  }<br>}</pre> | no |
+| <a name="input_datazone_environments"></a> [datazone\_environments](#input\_datazone\_environments) | The environments to deploy | <pre>map(object({<br>    name                           = string<br>    environment_profile_identifier = string<br>    project_identifier             = string<br>  }))</pre> | <pre>{<br>  "Curated": {<br>    "environment_profile_identifier": "DefaultDataLake",<br>    "name": "Curated Data Lake",<br>    "project_identifier": "data_team"<br>  },<br>  "Product": {<br>    "environment_profile_identifier": "DefaultDataLake",<br>    "name": "Product Data Lake",<br>    "project_identifier": "data_team"<br>  },<br>  "Raw": {<br>    "environment_profile_identifier": "DefaultDataLake",<br>    "name": "Raw Data Lake",<br>    "project_identifier": "data_team"<br>  }<br>}</pre> | no |
+| <a name="input_datazone_workspace_name"></a> [datazone\_workspace\_name](#input\_datazone\_workspace\_name) | The workspace to read outputs | `string` | `null` | no |
+| <a name="input_domain_id"></a> [domain\_id](#input\_domain\_id) | The domain to deploy the environment | `string` | `null` | no |
+| <a name="input_project_map"></a> [project\_map](#input\_project\_map) | The project to deploy the environment | `any` | `null` | no |
+| <a name="input_region"></a> [region](#input\_region) | The region to deploy the domain | `string` | `"ap-southeast-2"` | no |
+| <a name="input_tfc_organization"></a> [tfc\_organization](#input\_tfc\_organization) | The HCP Terraform organization name | `string` | `"tfc-demo-au"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_awscc_executionrole"></a> [awscc\_executionrole](#output\_awscc\_executionrole) | The AWS Control Tower Execution Role |
-| <a name="output_datazone_domain_id"></a> [datazone\_domain\_id](#output\_datazone\_domain\_id) | The ID of the DataZone Domain |
-| <a name="output_datazone_portal"></a> [datazone\_portal](#output\_datazone\_portal) | The DataZone Portal |
-| <a name="output_datazone_role_arn"></a> [datazone\_role\_arn](#output\_datazone\_role\_arn) | The ARN of the DataZone Role |
-| <a name="output_datazone_role_id"></a> [datazone\_role\_id](#output\_datazone\_role\_id) | The ID of the DataZone Role |
-| <a name="output_datazone_status"></a> [datazone\_status](#output\_datazone\_status) | The DataZone Status |
-| <a name="output_environment_project_id"></a> [environment\_project\_id](#output\_environment\_project\_id) | The ID of the Environment Project |
-| <a name="output_s3_datazone"></a> [s3\_datazone](#output\_s3\_datazone) | The S3 DataZone Bucket |
-| <a name="output_s3_datazone_region"></a> [s3\_datazone\_region](#output\_s3\_datazone\_region) | The S3 DataZone Bucket Region |
+| <a name="output_awscc_datazone_environment"></a> [awscc\_datazone\_environment](#output\_awscc\_datazone\_environment) | n/a |
+| <a name="output_environment_profile_identifier"></a> [environment\_profile\_identifier](#output\_environment\_profile\_identifier) | n/a |
