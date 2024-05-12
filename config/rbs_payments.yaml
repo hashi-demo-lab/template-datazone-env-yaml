@@ -26,6 +26,7 @@ datazone:
 redshift:
 datazone_environments:
   tfe_workspace: retail_payments_datazone_env_ws
+  region: "ap-southeast-2"
   datazone_workspace_name: "retail_payments_datazone_ws"
   datazone_environment_profiles:
     DefaultDataLake:
