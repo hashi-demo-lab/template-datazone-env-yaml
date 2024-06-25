@@ -17,7 +17,7 @@ output "tfe_outputs" {
 
 module "datazone_environment" {
   source  = "app.terraform.io/tfc-demo-au/datazone-environments/awscc"
-  version = "~>  0.1.7"
+  version = "~>  0.1.8"
 
   for_each = local.domain_existing
 
